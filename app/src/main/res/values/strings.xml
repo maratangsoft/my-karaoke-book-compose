@@ -1,0 +1,53 @@
+<resources>
+    <string name="app_name">My Karaoke Book v2</string>
+    <string name="bab_favorite">Favorite</string>
+    <string name="bab_search">Search</string>
+    <string name="bab_new_song">New</string>
+    <string name="bab_popular">Popular</string>
+    <string name="activity_setting">Setting</string>
+
+    <string name="confirm">CONFIRM</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete this Bookmark</string>
+
+    <string name="ic_sort">sort</string>
+    <string name="ic_setting">sort</string>
+    <string name="ic_add_favorite">add favorite</string>
+    <string name="ic_delete_favorite">delete favorite</string>
+    <string name="ic_arrow_down">open combo box</string>
+
+    <string name="lan_ko">Korean</string>
+    <string name="lan_en">English</string>
+    <string name="lan_ja">Japanese</string>
+    <string name="lan_zh">Chinese</string>
+
+    <!--Favorite Screen-->
+    <string name="favorite_dropdown_title">by title</string>
+    <string name="favorite_dropdown_singer">by singer</string>
+    <string name="favorite_dropdown_no">by number</string>
+    <string name="dialog_title">Title</string>
+    <string name="dialog_memo">You can write a memo about this song.</string>
+    <string name="no_data">There is no bookmark yet.</string>
+
+    <!--Search Screen-->
+    <string name="search_dropdown_title">title</string>
+    <string name="search_dropdown_singer">singer</string>
+    <string name="search_dropdown_no">number</string>
+    <string name="query_hint">Input words to search</string>
+
+    <!--New Song Screen-->
+    <string name="spin_month">Dec. 9999</string>
+
+    <!--Popular Screen-->
+    <string name="popular_dropdown_kor">Korean</string>
+    <string name="popular_dropdown_eng">English</string>
+    <string name="popular_dropdown_jpn">Japanese</string>
+
+    <!--setting Screen-->
+    <string name="txt_brand">Karaoke Brand</string>
+    <string name="radio_btn_tj">TJ</string>
+    <string name="radio_btn_ky">KY</string>
+    <string name="btn_reset">Reset Bookmark List</string>
+    <string name="txt_export">Export Bookmark List to .txt</string>
+    <string name="msg_clearDB">Do you really want to clear the bookmark list? If you do that, the app will be restarted.</string>
+</resources>
