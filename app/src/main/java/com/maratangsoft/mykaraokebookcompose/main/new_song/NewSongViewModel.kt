@@ -1,13 +1,16 @@
-package com.maratangsoft.mykaraokebookcompose.features.new_song
+package com.maratangsoft.mykaraokebookcompose.main.new_song
 
 import androidx.lifecycle.ViewModel
 import com.maratangsoft.mykaraokebookcompose.MonthType
+import com.maratangsoft.mykaraokebookcompose.data.model.Song
+import com.maratangsoft.mykaraokebookcompose.data.network.SongsRepository
+import com.maratangsoft.mykaraokebookcompose.main.NewSongUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 //@HiltViewModel
 class NewSongViewModel constructor(
-//    private val songsRepo: SongsRepository,
+    private val repository: SongsRepository,
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<NewSongUiState> =
@@ -16,19 +19,15 @@ class NewSongViewModel constructor(
         )
     val uiState = _uiState.asStateFlow()
 
-    fun fetchNewSongs(){
+    fun fetchNewSongs(monthType: MonthType){
 
     }
 
-    fun changeMonth(monthType: MonthType){
+    fun setDialogData(song: Song){
 
     }
 
-    fun onClickItem(){
-
-    }
-
-    fun onClickAddFavorite(){
+    fun onClickAddFavorite(song: Song){
 
     }
 }

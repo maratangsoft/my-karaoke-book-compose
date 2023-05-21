@@ -1,4 +1,4 @@
-package com.maratangsoft.mykaraokebookcompose.features.favorites
+package com.maratangsoft.mykaraokebookcompose.main.favorites
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -25,61 +27,96 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.maratangsoft.mykaraokebookcompose.R
 import com.maratangsoft.mykaraokebookcompose.SortType
-import com.maratangsoft.mykaraokebookcompose.data.model.Song
+import com.maratangsoft.mykaraokebookcompose.data.model.FavoriteSong
+import com.maratangsoft.mykaraokebookcompose.main.FavoritesUiState
 import com.maratangsoft.mykaraokebookcompose.main.LoadingWheel
-import com.maratangsoft.mykaraokebookcompose.main.ScreenLayout
 
 val topBarSize = 36.dp
 
 @Composable
 fun FavoriteScreen(
-    viewModel: FavoritesViewModel = viewModel()
+    viewModel: FavoritesViewModel
 ){
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    ScreenLayout(
-        topBar = { FavoriteTopBar() },
-        recyclerView = {
-            when (uiState) {
-                FavoritesUiState.Loading ->
-                    LoadingWheel()
-                is FavoritesUiState.Success ->
-                    FavoriteRecyclerView(
-                        items = (uiState as FavoritesUiState.Success).favorites
-                    )
-            }
-        }
-    )
-}
+    var dialogIsShown by remember { mutableStateOf(false) }
 
-@Composable
-fun FavoriteTopBar(
-){
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.End
+    Column(
+        Modifier
+            .fillMaxSize()
+            .padding(12.dp)
     ) {
-        SortButton()
-        Spacer(modifier = Modifier.width(40.dp))
+        FavoriteTopBar(viewModel)
+        Spacer(modifier = Modifier.height(16.dp))
+        if (uiState is FavoritesUiState.Success) {
+            FavoriteLazyColumn(
+                songs = (uiState as FavoritesUiState.Success).songs,
+                onClickItem = { song ->
+                    dialogIsShown = true
+                    viewModel.setDialogData(song)
+                }
+            )
+        }
+        else {
+            LoadingWheel()
+        }
     }
-}
-
-@Composable
-fun FavoriteRecyclerView(items: List<Song>){
-    LazyColumn {
-        items(
-            items = items,
-            itemContent = { FavoriteItem(it) },
+    if (dialogIsShown) {
+        FavoritesDialog(
+            song = (uiState as FavoritesUiState.Success).dialogData,
+            onDismissRequest = { dialogIsShown = false }
         )
     }
 }
 
 @Composable
+fun FavoriteTopBar(
+    viewModel: FavoritesViewModel
+){
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.End
+    ) {
+        SortButton(viewModel)
+        Spacer(modifier = Modifier.width(40.dp))
+    }
+}
+
+@Composable
+fun FavoriteLazyColumn(
+    songs: List<FavoriteSong>,
+    onClickItem: (FavoriteSong) -> Unit
+) {
+    LazyColumn {
+        items(
+            items = songs,
+            itemContent = { song ->
+                FavoriteItem(
+                    song = song,
+                    onClick = onClickItem
+                )
+            }
+        )
+    }
+}
+
+@Composable
+fun FavoritesDialog(
+    song: FavoriteSong,
+    onDismissRequest: () -> Unit
+){
+    Dialog(onDismissRequest = onDismissRequest) {
+
+    }
+}
+
+@Composable
 fun SortButton(
-    viewModel: FavoritesViewModel = viewModel()
+    viewModel: FavoritesViewModel
 ) {
     var isExpanded by remember { mutableStateOf(false) }
 
@@ -114,6 +151,6 @@ fun SortButton(
 @Preview
 @Composable
 fun FavoriteScreenPreview(){
-    FavoriteScreen()
+    FavoriteScreen(viewModel())
 }
 

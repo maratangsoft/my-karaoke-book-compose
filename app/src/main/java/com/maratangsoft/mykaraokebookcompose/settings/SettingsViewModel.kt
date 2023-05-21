@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.asStateFlow
 
 //@HiltViewModel
 class SettingsViewModel constructor(
-    private val configRepo: PreferencesRepository
+    private val repository: PreferencesRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(

@@ -3,6 +3,7 @@ package com.maratangsoft.mykaraokebookcompose.data.network
 import com.maratangsoft.mykaraokebookcompose.Brand
 import com.maratangsoft.mykaraokebookcompose.Language
 import com.maratangsoft.mykaraokebookcompose.SearchType
+import com.maratangsoft.mykaraokebookcompose.data.model.PopularSong
 import com.maratangsoft.mykaraokebookcompose.data.model.Song
 
 class SongsRepository constructor(
@@ -33,10 +34,10 @@ class SongsRepository constructor(
     fun getPopularSongs(
         brand: Brand,
         language: Language
-    ): List<Song> {
+    ): List<PopularSong> {
         return when (brand) {
-            Brand.TJ -> tj.songs
-            Brand.KY -> ky.songs
+            Brand.TJ -> tj.popularSongs
+            Brand.KY -> ky.popularSongs
         }
     }
 }

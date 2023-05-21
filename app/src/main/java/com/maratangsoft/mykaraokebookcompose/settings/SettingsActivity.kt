@@ -36,14 +36,19 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.maratangsoft.mykaraokebookcompose.Brand
 import com.maratangsoft.mykaraokebookcompose.R
+import com.maratangsoft.mykaraokebookcompose.di.Injection
 import com.maratangsoft.mykaraokebookcompose.main.theme.BrandColor
 import com.maratangsoft.mykaraokebookcompose.main.theme.MainTheme
 
 //@AndroidEntryPoint
 class SettingsActivity: ComponentActivity() {
-    private val viewModel by viewModels<SettingsViewModel>()
+//    private val viewModel by viewModels<SettingsViewModel>()
+
+    private val factory = Injection.provideViewModelFactory()
+    private val viewModel = factory.create(SettingsViewModel::class.java)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,7 +59,7 @@ class SettingsActivity: ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingScreen(
-    viewModel: SettingsViewModel? = null
+    viewModel: SettingsViewModel
 ){
     MainTheme {
         Scaffold(
@@ -189,5 +194,5 @@ fun ImportFavoritesButton(
 @Preview
 @Composable
 fun SettingPreview(){
-    SettingScreen()
+    SettingScreen(viewModel())
 }

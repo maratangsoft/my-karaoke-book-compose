@@ -1,14 +1,17 @@
-package com.maratangsoft.mykaraokebookcompose.features.search
+package com.maratangsoft.mykaraokebookcompose.main.search
 
 import androidx.lifecycle.ViewModel
 import com.maratangsoft.mykaraokebookcompose.SearchType
+import com.maratangsoft.mykaraokebookcompose.data.model.Song
+import com.maratangsoft.mykaraokebookcompose.data.network.SongsRepository
+import com.maratangsoft.mykaraokebookcompose.main.SearchUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 //@HiltViewModel
 class SearchViewModel constructor(
-//    private val songsRepo: SongsRepository
+    private val repository: SongsRepository
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<SearchUiState> =
@@ -20,15 +23,11 @@ class SearchViewModel constructor(
         )
     val uiState: StateFlow<SearchUiState> = _uiState.asStateFlow()
 
-    fun search(){
+    fun search(searchType: SearchType){
 
     }
 
-    fun changeQuery(){
-
-    }
-
-    fun onClickItem(){
+    fun setDialogData(song: Song){
 
     }
 

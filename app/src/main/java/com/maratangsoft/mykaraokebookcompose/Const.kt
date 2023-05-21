@@ -13,13 +13,13 @@ enum class Brand(val text: Int) {
 enum class SortType(val text: Int) {
     FAVORITED_DESC(R.string.favorite_dropdown_fav_desc), // default
     TITLE_ASC(R.string.favorite_dropdown_title_asc),
-    NUMBER_ASC(R.string.favorite_dropdown_no_asc),
+    NUMBER_ASC(R.string.favorite_dropdown_number_asc),
     SINGER_ASC(R.string.favorite_dropdown_singer_asc),
 }
 
 enum class SearchType(val text: Int) {
     TITLE(R.string.search_dropdown_title), // default
-    NUMBER(R.string.search_dropdown_no),
+    NUMBER(R.string.search_dropdown_number),
     SINGER(R.string.search_dropdown_singer)
 }
 

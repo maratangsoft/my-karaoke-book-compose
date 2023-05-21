@@ -1,17 +1,17 @@
-package com.maratangsoft.mykaraokebookcompose.features.search
+package com.maratangsoft.mykaraokebookcompose.main.popular
 
-import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.Button
@@ -25,86 +25,87 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.maratangsoft.mykaraokebookcompose.R
-import com.maratangsoft.mykaraokebookcompose.data.network.TjDataSource
-import com.maratangsoft.mykaraokebookcompose.features.favorites.topBarSize
-import com.maratangsoft.mykaraokebookcompose.main.CommonRecyclerView
-import com.maratangsoft.mykaraokebookcompose.main.ScreenLayout
+import com.maratangsoft.mykaraokebookcompose.data.model.PopularSong
+import com.maratangsoft.mykaraokebookcompose.main.LoadingWheel
+import com.maratangsoft.mykaraokebookcompose.main.PopularUiState
+import com.maratangsoft.mykaraokebookcompose.main.favorites.topBarSize
 import com.maratangsoft.mykaraokebookcompose.main.theme.BrandColor
 
 @Composable
-fun SearchScreen(
-    viewModel: SearchViewModel = viewModel() // hilt 쓸때는 뺄 것
+fun PopularScreen(
+    viewModel: PopularViewModel
 ){
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    var dialogIsShown by remember { mutableStateOf(false) }
 
-    val songs = remember { TjDataSource().songs }
-    ScreenLayout(
-        topBar = { SearchTopBar() },
-        recyclerView = { CommonRecyclerView(items = songs) }
-    )
-}
-
-@Composable
-fun SearchTopBar(){
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(topBarSize),
-        verticalAlignment = Alignment.CenterVertically
+    Column(
+        Modifier
+            .fillMaxSize()
+            .padding(12.dp)
     ) {
-        Row(
-            modifier = Modifier
-                .border(1.dp, BrandColor, RoundedCornerShape(6.dp))
-                .weight(1f, true),
-        ) {
-            SearchOptionButton()
-            SearchTextField(modifier = Modifier.fillMaxWidth())
+        PopularTopBar()
+        Spacer(modifier = Modifier.height(16.dp))
+        if (uiState is PopularUiState.Success) {
+            PopularLazyColumn(
+                songs = (uiState as PopularUiState.Success).songs,
+                onClickItem = { song ->
+                    dialogIsShown = true
+                    viewModel.setDialogData(song)
+                }
+            )
         }
-        Spacer(modifier = Modifier.width(40.dp))
+        else {
+            LoadingWheel()
+        }
     }
 }
 
 @Composable
-fun SearchTextField(modifier: Modifier){
-    val value by remember { mutableStateOf("") }
-    BasicTextField(
-        value = value,
-        onValueChange = {},
-        modifier = modifier
-            .fillMaxHeight()
-            .padding(8.dp, 0.dp)
-        ,
-        decorationBox = { innerTextField ->
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                if (value.isEmpty()) {
-                    Text(
-                        text = "search...",
-                        fontSize = 16.sp
-                    )
-                }
-            }
-            innerTextField()
-        }
-    )
+fun PopularTopBar(){
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(topBarSize),
+        horizontalArrangement = Arrangement.Center
+    ) {
+        SelectLanguageButton()
+    }
 }
 
 @Composable
-fun SearchOptionButton() {
+fun PopularLazyColumn(
+    songs: List<PopularSong>,
+    onClickItem: (PopularSong) -> Unit
+) {
+    LazyColumn {
+        items(
+            items = songs,
+            itemContent = { song ->
+                PopularItem(
+                    song = song,
+                    onClick = onClickItem
+                )
+            }
+        )
+    }
+}
+
+@Composable
+fun SelectLanguageButton() {
     var isExpanded by remember { mutableStateOf(false) }
 
-    val txtNo = stringResource(R.string.search_dropdown_title)
-    val txtTitle = stringResource(R.string.search_dropdown_singer)
-    val txtSinger = stringResource(R.string.search_dropdown_no)
-    var btnText by remember { mutableStateOf(txtNo) }
+    val txtKo = stringResource(R.string.lan_ko)
+    val txtEn = stringResource(R.string.lan_en)
+    val txtJa = stringResource(R.string.lan_ja)
+    val txtZh = stringResource(R.string.lan_zh)
+    var btnText by remember { mutableStateOf(txtKo) }
 
     Column {
         Button(
@@ -126,23 +127,30 @@ fun SearchOptionButton() {
             onDismissRequest = { isExpanded = false }
         ) {
             DropdownMenuItem(
-                text = { Text(txtTitle) },
+                text = { Text(txtKo) },
                 onClick = {
-                    btnText = txtTitle
+                    btnText = txtKo
                     isExpanded = false
                 }
             )
             DropdownMenuItem(
-                text = { Text(txtSinger) },
+                text = { Text(txtEn) },
                 onClick = {
-                    btnText = txtSinger
+                    btnText = txtEn
                     isExpanded = false
                 }
             )
             DropdownMenuItem(
-                text = { Text(txtNo) },
+                text = { Text(txtJa) },
                 onClick = {
-                    btnText = txtNo
+                    btnText = txtJa
+                    isExpanded = false
+                }
+            )
+            DropdownMenuItem(
+                text = { Text(txtZh) },
+                onClick = {
+                    btnText = txtZh
                     isExpanded = false
                 }
             )
@@ -152,6 +160,6 @@ fun SearchOptionButton() {
 
 @Preview
 @Composable
-fun SearchScreenPreview(){
-    SearchScreen()
+fun PopularScreenPreview(){
+    PopularScreen(viewModel())
 }

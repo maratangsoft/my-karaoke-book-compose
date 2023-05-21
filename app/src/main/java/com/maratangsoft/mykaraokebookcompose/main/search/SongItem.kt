@@ -1,5 +1,6 @@
-package com.maratangsoft.mykaraokebookcompose.features.search
+package com.maratangsoft.mykaraokebookcompose.main.search
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,23 +26,29 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.maratangsoft.mykaraokebookcompose.Language
 import com.maratangsoft.mykaraokebookcompose.R
 import com.maratangsoft.mykaraokebookcompose.data.model.Song
 
 @Composable
-fun SearchItem(song: Song){
+fun SongItem(
+    song: Song,
+    onClick: (Song) -> Unit
+){
     ItemLayout {
-        ItemText18(text = song.no)
-        Spacer(modifier = Modifier.padding(4.dp))
-        Column(
-            modifier = Modifier.fillMaxHeight(),
-            verticalArrangement = Arrangement.SpaceBetween
-        ) {
-            ItemText16(text = song.title)
-            ItemText14(text = song.singer)
-        }
-        AddFavoriteButton() {
+        Row(modifier = Modifier.clickable { onClick.invoke(song) }) {
+            ItemText18(text = song.id)
+            Spacer(modifier = Modifier.padding(4.dp))
+            Column(
+                modifier = Modifier.fillMaxHeight(),
+                verticalArrangement = Arrangement.SpaceBetween
+            ) {
+                ItemText16(text = song.title)
+                ItemText14(text = song.singer)
+            }
+            AddFavoriteButton() {
 
+            }
         }
     }
 }
@@ -120,13 +127,13 @@ fun AddFavoriteButton(
 @Preview
 @Composable
 fun SearchItemPreview(){
-    SearchItem(song = previewSong)
+    val previewSong = Song(
+        "tj",
+        "11111",
+        "Into the Unknown(Frozen2(겨울왕국2) OST)",
+        "빅나티(서동현),릴러말즈(Prod.빅나티(서동현))",
+        "2021-01-21",
+        Language.KO
+    )
+    SongItem(previewSong) {}
 }
-
-val previewSong = Song(
-    "tj",
-    "11111",
-    "Into the Unknown(Frozen2(겨울왕국2) OST)",
-    "빅나티(서동현),릴러말즈(Prod.빅나티(서동현))",
-    memo = "메모메모메모메모"
-)

@@ -28,8 +28,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.maratangsoft.mykaraokebookcompose.main.BottomNavItem
-import com.maratangsoft.mykaraokebookcompose.main.NavGraph
+import com.maratangsoft.mykaraokebookcompose.main.navigation.BottomNavItem
+import com.maratangsoft.mykaraokebookcompose.main.navigation.NavGraph
 import com.maratangsoft.mykaraokebookcompose.main.theme.BrandColor
 import com.maratangsoft.mykaraokebookcompose.main.theme.MainTheme
 import com.maratangsoft.mykaraokebookcompose.settings.SettingsActivity

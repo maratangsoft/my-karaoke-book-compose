@@ -1,4 +1,4 @@
-package com.maratangsoft.mykaraokebookcompose.features.favorites
+package com.maratangsoft.mykaraokebookcompose.main.favorites
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -11,18 +11,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.maratangsoft.mykaraokebookcompose.data.model.Song
-import com.maratangsoft.mykaraokebookcompose.features.search.ItemLayout
-import com.maratangsoft.mykaraokebookcompose.features.search.ItemText14
-import com.maratangsoft.mykaraokebookcompose.features.search.ItemText16
-import com.maratangsoft.mykaraokebookcompose.features.search.ItemText18
-import com.maratangsoft.mykaraokebookcompose.features.search.previewSong
+import com.maratangsoft.mykaraokebookcompose.Language
+import com.maratangsoft.mykaraokebookcompose.data.model.FavoriteSong
+import com.maratangsoft.mykaraokebookcompose.main.search.ItemLayout
+import com.maratangsoft.mykaraokebookcompose.main.search.ItemText14
+import com.maratangsoft.mykaraokebookcompose.main.search.ItemText16
+import com.maratangsoft.mykaraokebookcompose.main.search.ItemText18
 
 @Composable
-fun FavoriteItem(song: Song){
+fun FavoriteItem(
+    song: FavoriteSong,
+    onClick: (FavoriteSong) -> Unit
+){
     ItemLayout {
-        Row(modifier = Modifier.clickable {  }) {
-            ItemText18(text = song.no)
+        Row(modifier = Modifier.clickable { onClick.invoke(song) }) {
+            ItemText18(text = song.id)
             Spacer(modifier = Modifier.padding(4.dp))
             Column(
                 modifier = Modifier.fillMaxHeight(),
@@ -41,5 +44,15 @@ fun FavoriteItem(song: Song){
 @Preview
 @Composable
 fun FavoriteItemPreview(){
-    FavoriteItem(song = previewSong)
+    val previewSong = FavoriteSong(
+        1,
+        "tj",
+        "11111",
+        "Into the Unknown(Frozen2(겨울왕국2) OST)",
+        "빅나티(서동현),릴러말즈(Prod.빅나티(서동현))",
+        "2021-01-21",
+        Language.KO,
+        "memomemomemo"
+    )
+    FavoriteItem(previewSong) {}
 }

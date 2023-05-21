@@ -1,11 +1,16 @@
-package com.maratangsoft.mykaraokebookcompose.features.new_song
+package com.maratangsoft.mykaraokebookcompose.main.new_song
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -24,25 +29,44 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.maratangsoft.mykaraokebookcompose.R
-import com.maratangsoft.mykaraokebookcompose.data.network.TjDataSource
-import com.maratangsoft.mykaraokebookcompose.features.favorites.topBarSize
-import com.maratangsoft.mykaraokebookcompose.main.CommonRecyclerView
-import com.maratangsoft.mykaraokebookcompose.main.ScreenLayout
+import com.maratangsoft.mykaraokebookcompose.data.model.Song
+import com.maratangsoft.mykaraokebookcompose.main.LoadingWheel
+import com.maratangsoft.mykaraokebookcompose.main.NewSongUiState
+import com.maratangsoft.mykaraokebookcompose.main.favorites.topBarSize
+import com.maratangsoft.mykaraokebookcompose.main.search.SongItem
 import com.maratangsoft.mykaraokebookcompose.main.theme.BrandColor
 import java.util.GregorianCalendar
 
 @Composable
 fun NewSongScreen(
-    viewModel: NewSongViewModel = viewModel() // hilt 쓸때는 뺄 것
+    viewModel: NewSongViewModel
 ){
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    var dialogIsShown by remember { mutableStateOf(false) }
 
-    val songs = remember { TjDataSource().songs }
-    ScreenLayout(
-        topBar = { NewSongTopBar() },
-        recyclerView = { CommonRecyclerView(items = songs) }
-    )
+    Column(
+        Modifier
+            .fillMaxSize()
+            .padding(12.dp)
+    ) {
+        NewSongTopBar()
+        Spacer(modifier = Modifier.height(16.dp))
+        if (uiState is NewSongUiState.Success) {
+            NewSongLazyColumn(
+                songs = (uiState as NewSongUiState.Success).songs,
+                onClickItem = { song ->
+                    dialogIsShown = true
+                    viewModel.setDialogData(song)
+                }
+            )
+        }
+        else {
+            LoadingWheel()
+        }
+    }
 }
 
 @Composable
@@ -54,6 +78,24 @@ fun NewSongTopBar(){
         horizontalArrangement = Arrangement.Center
     ) {
         SelectMonthButton()
+    }
+}
+
+@Composable
+fun NewSongLazyColumn(
+    songs: List<Song>,
+    onClickItem: (Song) -> Unit
+) {
+    LazyColumn {
+        items(
+            items = songs,
+            itemContent = { song ->
+                SongItem(
+                    song = song,
+                    onClick = onClickItem
+                )
+            }
+        )
     }
 }
 
@@ -131,5 +173,5 @@ fun SelectMonthButton() {
 @Preview
 @Composable
 fun NewSongScreenPreview(){
-    NewSongScreen()
+    NewSongScreen(viewModel())
 }

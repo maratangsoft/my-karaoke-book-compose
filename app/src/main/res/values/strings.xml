@@ -25,7 +25,7 @@
     <string name="favorite_dropdown_fav_desc">favorited date</string>
     <string name="favorite_dropdown_title_asc">title</string>
     <string name="favorite_dropdown_singer_asc">singer</string>
-    <string name="favorite_dropdown_no_asc">number</string>
+    <string name="favorite_dropdown_number_asc">number</string>
     <string name="dialog_title">Title</string>
     <string name="dialog_memo">You can write a memo about this song.</string>
     <string name="no_data">There is no bookmark yet.</string>
@@ -33,7 +33,7 @@
     <!--Search Screen-->
     <string name="search_dropdown_title">title</string>
     <string name="search_dropdown_singer">singer</string>
-    <string name="search_dropdown_no">number</string>
+    <string name="search_dropdown_number">number</string>
     <string name="query_hint">Input words to search</string>
 
     <!--New Song Screen-->
